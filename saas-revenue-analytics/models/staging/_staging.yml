@@ -1,0 +1,68 @@
+version: 2
+models:
+  - name: stg_salesforce__accounts
+    description: One row per Salesforce account (current state).
+    columns:
+      - name: account_id
+        tests: [unique, not_null]
+      - name: route_to_market
+        tests:
+          - accepted_values:
+              arguments: {values: ['Direct', 'Partner']}
+  - name: stg_salesforce__account_history
+    description: Owner changes from Salesforce AccountHistory.
+    columns:
+      - name: account_history_id
+        tests: [unique, not_null]
+      - name: account_id
+        tests:
+          - relationships:
+              arguments: {to: ref('stg_salesforce__accounts'), field: account_id}
+  - name: stg_salesforce__opportunities
+    description: One row per opportunity.
+    columns:
+      - name: opportunity_id
+        tests: [unique, not_null]
+      - name: account_id
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('stg_salesforce__accounts'), field: account_id}
+      - name: opportunity_type
+        tests:
+          - accepted_values:
+              arguments: {values: ['New Business', 'Renewal']}
+  - name: stg_salesforce__opportunity_line_items
+    description: One row per opportunity product line.
+    columns:
+      - name: opportunity_line_item_id
+        tests: [unique, not_null]
+      - name: opportunity_id
+        tests:
+          - relationships:
+              arguments: {to: ref('stg_salesforce__opportunities'), field: opportunity_id}
+      - name: product_id
+        tests:
+          - relationships:
+              arguments: {to: ref('stg_salesforce__products'), field: product_id}
+  - name: stg_salesforce__users
+    columns:
+      - name: user_id
+        tests: [unique, not_null]
+  - name: stg_salesforce__products
+    columns:
+      - name: product_id
+        tests: [unique, not_null]
+  - name: stg_salesforce__territories
+    columns:
+      - name: territory_id
+        tests: [unique, not_null]
+  - name: stg_billing__subscriptions
+    description: One row per billed subscription term.
+    columns:
+      - name: subscription_id
+        tests: [unique, not_null]
+      - name: account_id
+        tests:
+          - relationships:
+              arguments: {to: ref('stg_salesforce__accounts'), field: account_id}

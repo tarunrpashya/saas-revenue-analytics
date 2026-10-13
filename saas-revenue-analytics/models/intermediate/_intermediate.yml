@@ -1,0 +1,14 @@
+version: 2
+models:
+  - name: int_account_owner_history
+    description: >
+      Effective-dated account ownership built from Salesforce AccountHistory.
+      One row per account per ownership period; valid_to is exclusive and null for the current owner.
+    columns:
+      - name: account_owner_period_id
+        tests: [unique, not_null]
+      - name: owner_id
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('stg_salesforce__users'), field: user_id}

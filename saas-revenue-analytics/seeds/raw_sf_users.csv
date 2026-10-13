@@ -1,0 +1,13 @@
+id,name,title,territory_id,is_active
+U001,Seller 01,Account Executive,T01,true
+U002,Seller 02,Account Executive,T02,true
+U003,Seller 03,Account Executive,T03,true
+U004,Seller 04,Account Executive,T04,true
+U005,Seller 05,Account Executive,T05,true
+U006,Seller 06,Account Executive,T06,true
+U007,Seller 07,Account Executive,T01,true
+U008,Seller 08,Account Executive,T02,true
+U009,Seller 09,Account Executive,T03,true
+U010,Seller 10,Account Executive,T04,true
+U011,Seller 11,Account Executive,T05,true
+U012,Seller 12,Account Executive,T06,true

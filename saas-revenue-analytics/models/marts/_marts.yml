@@ -1,0 +1,43 @@
+version: 2
+models:
+  - name: dim_sales_hierarchy
+    description: Seller to territory to region mapping (current state).
+    columns:
+      - name: seller_id
+        tests: [unique, not_null]
+      - name: territory_id
+        tests: [not_null]
+  - name: dim_accounts
+    description: One row per account with its current owner and territory.
+    columns:
+      - name: account_id
+        tests: [unique, not_null]
+  - name: fct_opportunities
+    description: >
+      One row per opportunity. Owner, territory and region are resolved as of the
+      close date so historical bookings do not move when accounts are reassigned.
+    columns:
+      - name: opportunity_id
+        tests: [unique, not_null]
+      - name: owner_id_at_close
+        tests: [not_null]
+      - name: region_at_close
+        tests: [not_null]
+  - name: fct_arr_monthly
+    description: One row per account per month with ARR and its movement versus the prior month.
+    columns:
+      - name: account_month_id
+        tests: [unique, not_null]
+      - name: arr_movement
+        tests:
+          - accepted_values:
+              arguments: {values: ['new', 'expansion', 'contraction', 'churn', 'flat']}
+  - name: fct_renewals
+    description: One row per expiring subscription term with its renewal outcome.
+    columns:
+      - name: renewal_status
+        tests:
+          - accepted_values:
+              arguments: {values: ['renewed', 'churned', 'open', 'upcoming']}
+  - name: rpt_weekly_forecast_pack
+    description: Pipeline, stage-weighted forecast and closed-won bookings by quarter, region, route to market and stage.
